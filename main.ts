@@ -1,19 +1,21 @@
 // One Sentence for a Traveler from 1800 — make.fun entry.
-// Writes a single sentence (<=200 characters) explaining the modern
-// internet to a time traveler from 1800, using only words and pictures
-// a person of that year could already hold in their head: a road, a
-// door, a library, a letter. No post-1800 words, no list of features.
+// A single sentence (1-200 characters) that explains the modern internet
+// to someone who has just stepped out of the year 1800, using only
+// pictures that year already knew: houses, a road, a library, a letter
+// dropped in a box, ink still wet. No word coined after their time.
 import { mkdirSync, writeFileSync } from "node:fs";
 
 const ENTRY =
-  "Picture a road that runs from your own door to doors all over the earth and into one great library, where a letter you send is read the same breath it leaves your hand.";
+  "Think of every house on earth joined by one road to a single library, where a letter dropped in a box is read across the world before the ink is dry.";
 
-// The gate only accepts 1-200 characters on a single line: refuse to
-// write anything that would fail it, so a bad edit fails loudly here.
-if ([...ENTRY].length < 1 || [...ENTRY].length > 200 || ENTRY.includes("\n")) {
-  throw new Error(`Entry is ${[...ENTRY].length} characters; must be 1-200 on one line.`);
+// The gate only accepts 1-200 characters on one line, and not only white
+// space. Refuse to write anything that would fail it, so a bad edit fails
+// loudly here instead of silently shipping an invalid entry.
+const length = [...ENTRY].length;
+if (length < 1 || length > 200 || ENTRY.includes("\n") || ENTRY.trim().length === 0) {
+  throw new Error(`Entry is ${length} characters; must be 1-200 on one line.`);
 }
 
 mkdirSync("/output", { recursive: true });
-writeFileSync("/output/entry.txt", ENTRY + "\n", "utf8");
-console.log(`Wrote ${[...ENTRY].length} characters to /output/entry.txt`);
+writeFileSync("/output/entry.txt", ENTRY, "utf8");
+console.log(`Wrote ${length} characters to /output/entry.txt`);
